@@ -11,8 +11,8 @@ using SaleApi.Data;
 namespace SaleApi.Migrations
 {
     [DbContext(typeof(SaleContextDB))]
-    [Migration("20251230103136_InitialCreate6")]
-    partial class InitialCreate6
+    [Migration("20260130004255_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -178,6 +178,9 @@ namespace SaleApi.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

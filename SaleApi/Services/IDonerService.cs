@@ -1,14 +1,20 @@
 ﻿using SaleApi.Dto;
 using SaleApi.Models;
+using static SaleApi.Dto.DonerDto;
 
 namespace SaleApi.Services
 {
     public interface IDonerService
     {
+        Task<IEnumerable<UpdateDonerDto>> GetAllDoner();
         Task DeleteDoner(int id);
-        Task<IEnumerable<Doner>> GetAllDoner();
-        Task<Doner> GetDonerById(int id);
-        Task<DonerDto.CreateDonerDto> NewDoner(DonerDto.CreateDonerDto donerDto);
-        Task<DonerDto.UpdateDonerDto> UpdateDoner(DonerDto.UpdateDonerDto donerDto);
+        Task<UpdateDonerDto> GetDonerById(int id);
+        Task<UpdateDonerDto> UpdateDoner(UpdateDonerDto donerDto);
+        Task<CreateDonerDto> NewDoner(CreateDonerDto donerDto);
+        Task<IEnumerable<GetDonerDtoWithGift>> GetAllDonerWithGift();
+        Task<GetDonerDtoWithGift> GetDonerByIdWithGift(int id);
+        Task<IEnumerable<UpdateDonerDto>> GetDonerByName(string name);
+        Task<IEnumerable<UpdateDonerDto>> GetDonerByMail(string email);
+        Task<IEnumerable<GetDonerDtoWithGift>> GetDonerByGift(string giftName);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SaleApi.Models;
 using static SaleApi.Dto.CategoryDto;
+using static SaleApi.Dto.GiftDto;
 
 namespace SaleApi.Services
 {
@@ -10,6 +11,7 @@ namespace SaleApi.Services
         Task DeleteCategory(int id);
         Task<Category> GetCategoryById(int id);
         Task<GetCategoryDto> UpdateCategory(GetCategoryDto CategoryDto);
+        Task<List<GiftResponseDto>> GetGiftByCategoryId(int categoryId);
 
     }
 }

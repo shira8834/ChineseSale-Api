@@ -69,6 +69,54 @@ namespace SaleApi.Repositories
 
         //כל התרומות של התורם
 
+        public async Task<IEnumerable<Doner>> GetAllDonerWithGift()
+        {
+            return await _context.Doners.Include(d=>d.Gifts).ToListAsync();
+        }
 
+
+        //GetDonerByIdWithGift
+        public async Task<Doner?> GetDonerByIdWithGift(int id)
+        {
+            return await _context.Doners.Include(d=>d.Gifts)
+                .FirstOrDefaultAsync(d=>d.Id==id);
+        }
+
+        //תורם לפי שם
+        public async Task<IEnumerable<Doner?>> GetDonerByName(string name)
+        {
+            var d = await _context.Doners
+          .Where(d => d.FirstName.StartsWith(name)
+          || d.LastName.StartsWith(name)
+          || (d.LastName+" "+d.FirstName).StartsWith(name)
+          || (d.FirstName+" "+d.LastName).StartsWith(name))
+          .ToListAsync();
+            return d;
+        }
+
+
+
+        //תורם לפי מייל
+        public async Task<IEnumerable<Doner?>> GetDonerByMail(string email)
+        {
+            var d = await _context.Doners
+                .Where(d => d.Email.StartsWith(email))
+                .ToListAsync();
+            return d;
+        }
+
+
+        //חיפוש לפי שם מתנה
+        public async Task<IEnumerable<Doner?>> GetDonerByGift(string giftName)
+        {
+            var d = await _context.Doners.Include(g => g.Gifts)
+                .Where(g => g.Gifts.Any(g => g.Name.StartsWith(giftName))).ToArrayAsync();
+            return d;
+        }
+
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            return await _context.Doners.AnyAsync(u => u.Email == email);
+        }
     }
 }

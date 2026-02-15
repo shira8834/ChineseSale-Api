@@ -17,6 +17,6 @@ namespace SaleApi.Models
         [Required,EmailAddress]
         public string Email { get; set; }
 
-        public virtual ICollection<Gift> Gifts { get; set; } = new List<Gift>();
+        public ICollection<Gift> Gifts { get; set; } = new List<Gift>();
     }
 }

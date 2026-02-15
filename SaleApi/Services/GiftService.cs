@@ -1,18 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using SaleApi.Dto;
 using SaleApi.Models;
 using SaleApi.Repositories;
 using static SaleApi.Dto.DonerDto;
 using static SaleApi.Dto.GiftDto;
+using static SaleApi.Dto.UserDto;
 
 namespace SaleApi.Services
 {
     public class GiftService : IGiftService
     {
         private readonly IGiftRepository _giftRepository;
+        private readonly ILogger<GiftService> _logger;
 
-        public GiftService(IGiftRepository giftRepository)
+
+        public GiftService(IGiftRepository giftRepository, ILogger<GiftService> logger)
         {
             _giftRepository = giftRepository;
+            _logger = logger;
         }
         //כל המתנות 
         public async Task<IEnumerable<GetGiftDto>> GetAllGift()
@@ -25,42 +31,70 @@ namespace SaleApi.Services
                 Id = g.Id,
                 Name = g.Name,
                 Description = g.Description,
+                Img=g.Img,
                 Price = g.Price,
-                IdDoner=g.IdDoner,
-                Doner=g.Doner
+                IdDoner = g.IdDoner,
+                CategoryId=g.CategoryId,
+                Doner = new UpdateDonerDto
+                {
+                    Id = g.Doner.Id,
+                    FirstName = g.Doner.FirstName,
+                    LastName = g.Doner.LastName,
+                    EMail = g.Doner.Email
+                }
             });
-
-            return giftDtos;
+            return giftDtos.ToList();
         }
 
 
 
 
         //מתנה חדשה
-        public async Task<CreateGiftDto> NewGift(CreateGiftDto giftDto)
+        public async Task<GiftResponseDto> NewGift(CreateGiftDto giftDto)
         {
+            if(giftDto.Price<10)
+                throw new ArgumentException($"Price {giftDto.Price} is smaller");
+
             var gift = new Gift
             {
                 Name = giftDto.Name,
                 Description = giftDto.Description,
-                Img = giftDto.Img,
+                //Img = giftDto.Img,
                 Price = giftDto.Price,
                 IdDoner = giftDto.IdDoner,
-                //    CategoryId=giftDto.CategoryId,
+                CategoryId=giftDto.CategoryId,
 
             };
-            var cerated = await _giftRepository.NewGift(gift);
-            return new CreateGiftDto
+
+            if (giftDto.Image != null)
             {
-                Name = cerated.Name,
-                Description = cerated.Description,
-                Img = cerated.Img,
-                Price = cerated.Price,
-                IdDoner = cerated.IdDoner,
-                //  CategoryId = cerated.CategoryId,
-            };
-        }
+                var fileName = Guid.NewGuid() +
+                               Path.GetExtension(giftDto.Image.FileName);
 
+                var folderPath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot/images/gifts"
+                );
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                var filePath = Path.Combine(folderPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await giftDto.Image.CopyToAsync(stream);
+                }
+
+                gift.Img = $"images/gifts/{fileName}";
+            }
+
+
+            var created = await _giftRepository.NewGift(gift);
+            _logger.LogInformation("Gift created with ID: {GiftId}", created.Id);
+
+            return MapToResponseGiftDto(created);
+        }
 
 
         //מחיקת מתנה
@@ -71,35 +105,109 @@ namespace SaleApi.Services
 
 
         //GetGiftById
-        public async Task<Gift> GetGiftById(int id)
+        public async Task<GetGiftDto> GetGiftById(int id)
         {
             var g = await _giftRepository.GetGiftById(id);
             if (g == null) return null;
-            return g;
+            var gift=new GetGiftDto
+            {
+                Id = g.Id,
+                Name = g.Name,
+                Description = g.Description,
+                Img = g.Img,
+                Price = g.Price,
+                IdDoner = g.IdDoner,
+                CategoryId=g.CategoryId,
+                Doner = new UpdateDonerDto
+                {
+                    Id = g.Doner.Id,
+                    FirstName = g.Doner.FirstName,
+                    LastName = g.Doner.LastName,
+                    EMail = g.Doner.Email
+                }
+            };
+            return gift;
         }
 
 
-        //עידכון מתנה
-        public async Task<UpdateGiftDto> UpdateGift(UpdateGiftDto giftDto)
+        ////עידכון מתנה
+        //public async Task<GiftResponseDto> UpdateGift(UpdateGiftDto giftDto)
+        //{
+        //    var existing = await _giftRepository.GetGiftById(giftDto.Id);
+        //    if (existing == null) return null;
+
+        //    existing.Name = giftDto.Name ?? existing.Name;
+        //    existing.Description = giftDto.Description ?? existing.Description;
+        //    existing.Img = giftDto.Img ?? existing.Img;
+        //    existing.CategoryId = giftDto.CategoryId ?? existing.CategoryId;
+        //    if (giftDto.Price > 0)
+        //    {
+        //        existing.Price = giftDto.Price;
+        //    }
+
+        //    if (giftDto.Price < 0)
+        //    {
+        //      throw new ArgumentException($"Price {giftDto.Price} is smaller");
+        //    }
+
+        //    // existing.IdDoner = giftDto.IdDoner ?? existing.IdDoner;
+
+        //    var updatedGift = await _giftRepository.UpdateGift(existing);
+        //    if (updatedGift == null) return null;
+        //    _logger.LogInformation("Gift update with ID: {GiftId}", updatedGift.Id);
+        //    return MapToResponseGiftDto(updatedGift);
+        //}
+
+        public async Task<GiftResponseDto> UpdateGift(UpdateGiftDto giftDto)
         {
             var existing = await _giftRepository.GetGiftById(giftDto.Id);
-            if (existing == null) return null;
+            if (existing == null)
+                throw new KeyNotFoundException($"Gift with id {giftDto.Id} not found");
 
+            if (giftDto.Price < 10)
+                throw new ArgumentException($"Price {giftDto.Price} is smaller");
+
+            existing.Price = giftDto.Price;
             existing.Name = giftDto.Name ?? existing.Name;
             existing.Description = giftDto.Description ?? existing.Description;
-            existing.Img = giftDto.Img ?? existing.Img;
-            if (giftDto.Price > 0)
+            existing.CategoryId = giftDto.CategoryId ?? existing.CategoryId;
+
+            if (giftDto.Image != null)
             {
-                existing.Price = giftDto.Price;
+                if (!string.IsNullOrEmpty(existing.Img))
+                {
+                    var oldPath = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot",
+                        existing.Img.TrimStart('/')
+                    );
+
+                    if (File.Exists(oldPath))
+                        File.Delete(oldPath);
+                }
+
+                var extension = Path.GetExtension(giftDto.Image.FileName);
+                var fileName = $"{Guid.NewGuid()}{extension}";
+                var folderPath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    "images",
+                    "gifts"
+                );
+
+                Directory.CreateDirectory(folderPath);
+
+                var filePath = Path.Combine(folderPath, fileName);
+                using var stream = new FileStream(filePath, FileMode.Create);
+                await giftDto.Image.CopyToAsync(stream);
+
+                existing.Img = $"images/gifts/{fileName}";
             }
 
-            // existing.IdDoner = giftDto.IdDoner ?? existing.IdDoner;
-
             var updatedGift = await _giftRepository.UpdateGift(existing);
-            if (updatedGift == null) return null;
-            return new UpdateGiftDto
-            { Id = updatedGift.Id, Name = updatedGift.Name, Img = updatedGift.Img, Description = updatedGift.Description, Price = updatedGift.Price };
+            _logger.LogInformation("Gift updated with ID: {GiftId}", updatedGift.Id);
 
+            return MapToResponseGiftDto(updatedGift);
         }
 
 
@@ -119,14 +227,69 @@ namespace SaleApi.Services
             };
 
             //return await _giftRepository.GetGiftDoner(id);
+        }
 
+
+        //חיפוש לפי שם תורם
+        public async Task<IEnumerable<GetGiftDto>> GetGiftByDoner(string name)
+        {
+            var g = await _giftRepository.GetGiftByDoner(name);
+
+            var giftDtos = g.Select(g => new GetGiftDto
+            {
+                Id = g.Id,
+                Name = g.Name,
+                Description = g.Description,
+                Img = g.Img,
+                Price = g.Price,
+                IdDoner = g.IdDoner,
+                Doner = new UpdateDonerDto
+                {
+                    Id = g.Doner.Id,
+                    FirstName = g.Doner.FirstName,
+                    LastName = g.Doner.LastName,
+                    EMail = g.Doner.Email
+                }
+            });
+            return giftDtos.ToList();
 
         }
 
 
 
+        //חיפוש לפי שם מתנה
+        public async Task<IEnumerable<GiftResponseDto>> GetGiftByName(string name)
+        {
+            var g = await _giftRepository.GetGiftByName(name);
+            
+            var giftDtos = g.Select(g => new GiftResponseDto
+            {
+                Id = g.Id,
+                Name = g.Name,
+                Description = g.Description,
+                Img = g.Img,
+                Price = g.Price,
+                CategoryId=g.CategoryId,
+                IdDoner = g.IdDoner,
+            });
+            return giftDtos.ToList();
+
+        }
 
 
+        private static GiftResponseDto MapToResponseGiftDto(Gift gift)
+        {
+            return new GiftResponseDto
+            {
+                Id = gift.Id,
+                Name = gift.Name,
+                Description = gift.Description,
+                Img = gift.Img,
+                Price = gift.Price,
+                CategoryId = gift.CategoryId,
+                IdDoner= gift.IdDoner,
 
+            };
+        }
     }
 }

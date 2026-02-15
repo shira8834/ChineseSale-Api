@@ -6,6 +6,7 @@ namespace SaleApi.Data
 {
     public class SaleContextDB: DbContext
     {
+
         public SaleContextDB(DbContextOptions<SaleContextDB> options) : base(options) { }
         public DbSet<Bag> Bags { get; set; }
         public DbSet<Doner> Doners { get; set; }
@@ -14,6 +15,14 @@ namespace SaleApi.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Winner> Winners { get; set; }
         public DbSet<Category> Categories { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;DataBase=SaleDB;Integrated Security=SSPI;Persist Security Info=False;TrustServerCertificate=True;");
+            }
+        }
 
         internal object GetGiftById(int id)
         {

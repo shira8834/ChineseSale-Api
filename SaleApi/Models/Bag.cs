@@ -15,5 +15,6 @@ namespace SaleApi.Models
         [ForeignKey("Gift")]
         public int IdGift { get; set; }
         public Gift Gift { get; set; } = null!;
+        public int Quantity { get; set; }
     }
 }

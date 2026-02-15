@@ -2,6 +2,13 @@
 
 namespace SaleApi.Models
 {
+    public enum UserRole
+    {
+        Admin,
+        User,
+        
+    }
+
     public class User
     {
         public int Id { get; set; }
@@ -17,7 +24,9 @@ namespace SaleApi.Models
 
         [Required , EmailAddress]
         public string Email { get; set; } = null!;
+        public string? PhoneNumber { get; set; } = string.Empty;
+        [Required]
+        public UserRole Role { get; set; } = UserRole.User;
 
-        public string? PhoneNumber { get; set; }
     }
 }

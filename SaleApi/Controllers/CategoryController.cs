@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SaleApi.Models;
 using SaleApi.Services;
 using static SaleApi.Dto.CategoryDto;
 using static SaleApi.Dto.DonerDto;
+using static SaleApi.Dto.GiftDto;
 
 namespace SaleApi.Controllers
 {
@@ -12,10 +14,12 @@ namespace SaleApi.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+        private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ICategoryService cotegoryService)
+        public CategoryController(ICategoryService cotegoryService, ILogger<CategoryController> logger)
         {
             _categoryService = cotegoryService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -26,6 +30,7 @@ namespace SaleApi.Controllers
         }
 
         [HttpPost]
+        //[Authorize(Roles = "manager")]
         public async Task<ActionResult<Category>> NewCategory([FromBody] CreateCategoryDto dto)
         {
             if (!ModelState.IsValid)
@@ -48,6 +53,7 @@ namespace SaleApi.Controllers
 
         //מחיקת קטגוריה
         [HttpDelete("{id}")]
+        //[Authorize(Roles = "manager")]
         public async Task<IActionResult> DeleteDoner(int id)
         {
             try
@@ -57,7 +63,7 @@ namespace SaleApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, "Internal server error יש מוצרים בקטגוריה הזו");
             }
         }
 
@@ -83,6 +89,7 @@ namespace SaleApi.Controllers
 
         //עידכון קטגוריה 
         [HttpPut]
+        //[Authorize(Roles = "manager")]
         public async Task<ActionResult<Category>> UpdateCategory([FromBody] GetCategoryDto dto)
         {
             if (!ModelState.IsValid)
@@ -100,5 +107,26 @@ namespace SaleApi.Controllers
             }
         }
 
-    }
+
+        // את כל המוצרים של קטגוריה
+        [HttpGet("gift/{categoryId}")]
+        public async Task<ActionResult<List<GiftResponseDto>>> GetGiftByCategoryId(int categoryId)
+        {
+            try
+            {
+                var category = await _categoryService.GetCategoryById(categoryId);
+                if (category == null)
+                    return NotFound($"Category with ID {categoryId} not found.");
+
+                var gifts = await _categoryService.GetGiftByCategoryId(categoryId);
+                return Ok(gifts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+
+        }
 }

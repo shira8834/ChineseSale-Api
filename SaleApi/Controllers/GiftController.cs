@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SaleApi.Models;
 using SaleApi.Services;
 using static SaleApi.Dto.DonerDto;
@@ -12,15 +14,18 @@ namespace SaleApi.Controllers
     public class GiftController: ControllerBase
     {
             private readonly IGiftService _giftService;
+            private readonly ILogger<GiftController> _logger;
 
-            public GiftController(IGiftService giftService)
+        public GiftController(IGiftService giftService, ILogger<GiftController>logger)
             {
             _giftService = giftService;
-            }
+            _logger = logger;
+
+        }
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Gift>>> GetAllGift()
+        public async Task<ActionResult<IEnumerable<GetGiftDto>>> GetAllGift()
         {
             try
             {
@@ -31,13 +36,13 @@ namespace SaleApi.Controllers
             {
                 Console.WriteLine($"Error: {ex.Message}");
                 return StatusCode(500, "Internal server error");
-            }
-            ;
+            };
         }
 
         // מתנה חדשה
         [HttpPost]
-        public async Task<ActionResult<Gift>> NewGift([FromBody] CreateGiftDto dto)
+        //[Authorize(Roles = "manager")]
+        public async Task<ActionResult<Gift>> NewGift([FromForm] CreateGiftDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -49,14 +54,15 @@ namespace SaleApi.Controllers
 
                 return Ok(created);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, "Internal server error");
+                return BadRequest(new { message = ex.Message });
             }
         }
 
-        //מחיקת תורם
+        //מחיקת מתנה
         [HttpDelete("{id}")]
+        //[Authorize(Roles = "manager")]
         public async Task<IActionResult> DeletGift(int id)
         {
             try
@@ -74,7 +80,7 @@ namespace SaleApi.Controllers
 
         //get by id
         [HttpGet("{id}")]
-        public async Task<ActionResult<Gift>> GetGiftById(int id)
+        public async Task<ActionResult<GetGiftDto>> GetGiftById(int id)
         {
             try
             {
@@ -92,7 +98,8 @@ namespace SaleApi.Controllers
 
         //עידכון מתנה
         [HttpPut]
-        public async Task<ActionResult<Gift>> UpdateGift([FromBody] UpdateGiftDto dto)
+        //[Authorize(Roles = "manager")]
+        public async Task<ActionResult<GiftResponseDto>> UpdateGift([FromForm] UpdateGiftDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -103,9 +110,9 @@ namespace SaleApi.Controllers
                     return BadRequest("Failed to update gift.");
                 return Ok(updated);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return StatusCode(500, "Internal server error");
+                return BadRequest(new { message = ex.Message });
             }
         }
         //מי התורם של המתנה
@@ -118,6 +125,44 @@ namespace SaleApi.Controllers
                 return NotFound($"Doner for gift ID {id} not found.");
             }
             return Ok(doner);
+        }
+
+
+
+        // get by doner name
+
+        [HttpGet("doner/")]
+        public async Task<ActionResult<IEnumerable<GetGiftDto>>> GetGiftByDoner([FromQuery] string name)
+        {
+            try
+            {
+                var gift = await _giftService.GetGiftByDoner(name);
+                //if (gift == null)
+                //    return NotFound();
+                return Ok(gift);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // get by name
+
+        [HttpGet("name/")]
+        public async Task<ActionResult<IEnumerable<UpdateGiftDto>>> GetGiftByName([FromQuery] string name)
+        {
+            try
+            {
+                var gift = await _giftService.GetGiftByName(name);
+                //if (gift == null)
+                //    return NotFound();
+                return Ok(gift);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 

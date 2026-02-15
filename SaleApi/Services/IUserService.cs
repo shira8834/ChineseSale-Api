@@ -1,9 +1,16 @@
 ﻿using SaleApi.Models;
+using static SaleApi.Dto.UserDto;
 
 namespace SaleApi.Services
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> GetAllUser();
+        Task<IEnumerable<UserResponseDto>> GetAllUsersAsync();
+        //Task<RegisterUserDto> NewUser(RegisterUserDto userDto);
+        Task<UserResponseDto> CreateUserAsync(UserCreateDto createDto);
+        Task<UserResponseDto?> GetUserByIdAsync(int id);
+        Task<UserResponseDto?> UpdateUserAsync(int id, UserUpdateDto updateDto);
+        Task<bool> DeleteUserAsync(int id);
+        Task<LoginResponseDto?> AuthenticateAsync(string email, string password);
     }
 }

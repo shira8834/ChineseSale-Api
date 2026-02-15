@@ -8,8 +8,10 @@ namespace SaleApi.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required, ForeignKey("User")]
         public int IdUser { get; set; }
+
+        public User User { get; set; }
 
         [Required, ForeignKey("Gift")]
         public int IdGift { get; set; }

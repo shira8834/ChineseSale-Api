@@ -9,6 +9,6 @@ namespace SaleApi.Repositories
         Task DeleteCategory(int id);
         Task<Category> GetCategoryById(int id);
         Task<Category> UpdateCategory(Category category);
-
+        Task<List<Gift>> GetGiftByCategoryId(int categoryId);
     }
 }

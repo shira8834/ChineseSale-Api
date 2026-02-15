@@ -2,6 +2,7 @@
 using SaleApi.Data;
 using SaleApi.Models;
 using static SaleApi.Dto.CategoryDto;
+using static SaleApi.Dto.GiftDto;
 
 namespace SaleApi.Repositories
 {
@@ -55,5 +56,11 @@ namespace SaleApi.Repositories
             return category;
         }
 
+        // את כל המוצרים של קטגוריה
+        public async Task<List<Gift>> GetGiftByCategoryId(int categoryId)
+        {
+            return await _context.Gifts.Where(g=>g.CategoryId==categoryId)
+                .ToListAsync();
+        }
     }
 }

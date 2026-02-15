@@ -17,7 +17,8 @@ namespace SaleApi.Repositories
         {
             try
             {
-                return await _context.Gifts.ToListAsync();
+                return await _context.Gifts.Include(g => g.Doner)
+                     .AsNoTracking().ToListAsync();
             }
             catch (Exception ex)
             {
@@ -78,6 +79,25 @@ namespace SaleApi.Repositories
                 .FirstOrDefaultAsync(g => g.Id == id);
 
             return giftWithDoner?.Doner;
+        }
+
+        //חיפוש לפי שם תורם
+        public async Task<IEnumerable<Gift?>> GetGiftByDoner(string name)
+        {
+            var g = await _context.Gifts.Include(g => g.Doner)
+                .Where(g=>g.Doner.FirstName.StartsWith(name)
+                || g.Doner.LastName.StartsWith(name)).ToArrayAsync();
+            return g;
+        }
+
+
+        //חיפוש לפי שם מתנה
+        public async Task<IEnumerable<Gift?>> GetGiftByName(string name)
+        {
+            var g = await _context.Gifts.Include(g => g.Doner)
+                .Where(g => g.Name.StartsWith(name))
+             .ToArrayAsync();
+            return g;
         }
     }
 }

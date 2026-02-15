@@ -1,16 +1,21 @@
-﻿using SaleApi.Models;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using SaleApi.Models;
 using SaleApi.Repositories;
 using static SaleApi.Dto.CategoryDto;
 using static SaleApi.Dto.DonerDto;
+using static SaleApi.Dto.GiftDto;
 
 namespace SaleApi.Services
 {
     public class CategoryService: ICategoryService
     {
         private readonly ICategoryRepository _categoryrRepository;
-        public CategoryService(ICategoryRepository categoryrRepository)
+        private readonly ILogger<CategoryService> _logger;
+
+        public CategoryService(ICategoryRepository categoryrRepository, ILogger<CategoryService> logger)
         {
             _categoryrRepository = categoryrRepository;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<Category>> GetAllCategory()
@@ -30,6 +35,8 @@ namespace SaleApi.Services
                Color = categoryDto.Color,
             };
             var cerated = await _categoryrRepository.NewCategory(category);
+            _logger.LogInformation("Category created with ID: {CategoryId}", cerated.Id);
+
             return new CreateCategoryDto
             {
                 Name = cerated.Name,
@@ -64,9 +71,32 @@ namespace SaleApi.Services
         
             var updatedCategory = await _categoryrRepository.UpdateCategory(existing);
             if (updatedCategory == null) return null;
+            _logger.LogInformation("Category update with ID: {CategoryId}", updatedCategory.Id);
             return new GetCategoryDto
             {Name = updatedCategory.Name, Color=updatedCategory.Color };
+        }
 
+
+        // את כל המוצרים של קטגוריה
+        public async Task<List<GiftResponseDto>> GetGiftByCategoryId(int categoryId)
+        {
+            var gifts = await _categoryrRepository.GetGiftByCategoryId(categoryId);
+            return gifts.Select(g =>MapToResponseGiftDto(g)).ToList();
+
+        }
+        private static GiftResponseDto MapToResponseGiftDto(Gift gift)
+        {
+            return new GiftResponseDto
+            {
+                Id = gift.Id,
+                Name = gift.Name,
+                Description = gift.Description,
+                Img = gift.Img,
+                Price = gift.Price,
+                CategoryId = gift.CategoryId,
+                IdDoner = gift.IdDoner,
+
+            };
         }
 
     }

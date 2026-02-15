@@ -15,6 +15,7 @@
             public string Name { get; set; }
             public string Color { get; set; }
         }
+
         public class DeleteCategoryDto
         {
             public int Id { get; set; }

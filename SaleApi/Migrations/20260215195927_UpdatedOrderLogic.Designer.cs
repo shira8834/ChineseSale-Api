@@ -11,8 +11,8 @@ using SaleApi.Data;
 namespace SaleApi.Migrations
 {
     [DbContext(typeof(SaleContextDB))]
-    [Migration("20251224140721_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260215195927_UpdatedOrderLogic")]
+    partial class UpdatedOrderLogic
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace SaleApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("IdUser")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -149,6 +152,8 @@ namespace SaleApi.Migrations
 
                     b.HasIndex("IdGift");
 
+                    b.HasIndex("IdUser");
+
                     b.ToTable("Orders");
                 });
 
@@ -178,6 +183,9 @@ namespace SaleApi.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -251,7 +259,15 @@ namespace SaleApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SaleApi.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Gift");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SaleApi.Models.Winner", b =>
