@@ -869,6 +869,22 @@
     ]
   },
   {
+    "ContainingType": "SaleApi.Controllers.RandomController",
+    "Method": "RunDraw",
+    "RelativePath": "api/Random/{giftId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "giftId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SaleApi.Controllers.UserController",
     "Method": "GetAll",
     "RelativePath": "api/User",

@@ -7,7 +7,7 @@ using static SaleApi.Dto.GiftDto;
 [ApiController]
 public class OrderController : ControllerBase
 {
-    private readonly IOrderService _orderService; // שימוש בממשק (I)
+    private readonly IOrderService _orderService; 
 
     public OrderController(IOrderService orderService)
     {
@@ -27,7 +27,6 @@ public class OrderController : ControllerBase
             Console.WriteLine($"Error: {ex.Message}");
             return StatusCode(500, "Internal server error");
         }
-        ;
     }
 
 

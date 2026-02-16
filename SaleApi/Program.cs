@@ -34,12 +34,15 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBagService, BagService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<SaleApi.Services.TokenService>();
+builder.Services.AddScoped<IRandomService, RandomService>();
+
 
 builder.Services.AddScoped<IGiftRepository, GiftRepository>();
 builder.Services.AddScoped<IDonerRepository, DonerRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBagRepository, BagRepository>();
+builder.Services.AddScoped<IRandomRepository, RandomRepository>();
 
 builder.Services.AddDbContext<SaleContextDB>(options =>
         options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;DataBase=SaleDB;Integrated Security=SSPI;Persist Security Info=False;TrustServerCertificate=True;"));

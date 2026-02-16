@@ -6,7 +6,6 @@ namespace SaleApi.Models
     {
         Admin,
         User,
-        
     }
 
     public class User

@@ -1467,6 +1467,29 @@
         }
       }
     },
+    "/api/Random/{giftId}": {
+      "post": {
+        "tags": [
+          "Random"
+        ],
+        "parameters": [
+          {
+            "name": "giftId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/User": {
       "get": {
         "tags": [
