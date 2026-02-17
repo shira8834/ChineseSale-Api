@@ -1,0 +1,57 @@
+<div class="card shadow-2 p-4 m-4 border-round">
+    <h2 class="text-3xl font-bold text-primary mb-4">רשימת הזמנות</h2>
+
+    <!--  -->
+  <div style="display: flex; gap: 20px; margin-bottom: 30px;">
+    
+    <div style="flex: 1; background: #2c3e50; color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      <div style="font-size: 1rem; opacity: 0.8;">סך הכנסות מצטבר</div>
+      <div style="font-size: 2.2rem; font-weight: bold;">
+        {{ totalRevenue() | currency:'ILS':'symbol':'1.0-0' }}
+      </div>
+    </div>
+
+    <div style="flex: 1; background: #ffffff; border: 1px solid #dee2e6; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+      <div style="font-size: 1rem; color: #6c757d;">מספר הזמנות כולל</div>
+      <div style="font-size: 2.2rem; font-weight: bold; color: #2c3e50;">
+        {{ orders().length }}
+      </div>
+    </div>
+
+  </div>
+
+  <div style="flex: 1; background: #fff3e0; border: 1px solid #ffe0b2; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+  <div style="color: #e65100; font-size: 0.9rem; font-weight: bold;">💰 ממוצע להזמנה</div>
+  <div style="font-size: 2.2rem; font-weight: bold; color: #ef6c00;">
+    {{ averageOrderValue() | currency:'ILS':'symbol':'1.0-1' }}
+  </div>
+  <div style="font-size: 0.8rem; color: #ff9800;">הסכום הממוצע שנתרם בכל רכישה</div>
+</div>
+
+<!--  -->
+    <p-table [value]="orders()" [responsiveLayout]="'scroll'" styleClass="p-datatable-striped">
+              <ng-template pTemplate="header">
+        <tr>
+          <th>ID</th>
+          <th>שם הלקוח</th>
+          <th>שם המתנה</th>
+          <th>מחיר</th>
+          <th>זכייה</th>
+        </tr>
+      </ng-template>
+      
+      <ng-template pTemplate="body" let-order>
+        <tr>
+          <td>{{ order.id }}</td>
+          <td>{{ order.user?.firstName }} {{ order.user?.lastName }}</td>
+          <td>{{ order.gift?.name }}</td>
+          <td>{{ order.gift?.price | currency:'ILS' }}</td>
+          <td>
+            <span [class]="order.win ? 'text-green-600 font-bold' : 'text-gray-400'">
+              {{ order.win ? 'כן' : 'לא' }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>

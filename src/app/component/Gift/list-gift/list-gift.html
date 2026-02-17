@@ -1,0 +1,131 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+<app-navbar></app-navbar> <router-outlet></router-outlet>
+
+<div class="card">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <p-button label="הוספת מתנה חדשה" icon="pi pi-plus" class="p-button-success mr-2"
+                (onClick)="openNew()"></p-button>
+        </ng-template>
+    </p-toolbar>
+
+    <!-- רכיב לסינון לפי קטגוריה   -->
+    <app-gift-by-category [categories]="categories()" (onCategoryChange)="onFilterChanged($event)">
+    </app-gift-by-category>
+
+    <!--  -->
+
+    <div class="gift-grid">
+        @for (product of products(); track product.id) {
+        <div class="gift-card" [style.border-top-color]="getCategoryColor(product.categoryId)"
+            [style.--card-color]="getCategoryColor(product.categoryId)">
+            <div class="gift-image-container">
+                @if (product.img) {
+                <img [src]="serverUrl + '/' + product.img" [alt]="product.name" class="gift-image" />
+                } @else {
+                <div class="no-image"><i class="pi pi-image"></i></div>
+                }
+                <span class="gift-price">{{product.price}} ₪</span>
+            </div>
+
+            <div class="gift-content">
+                <h3 class="gift-title">{{product.name}}</h3>
+                <p class="gift-description">{{product.description}}</p>
+
+                <!--  -->
+
+                @if (getWinner(product.id); as winner) {
+                <div class="winner-section"
+                    style="background-color: #fff4e5; border: 1px dashed #ffa500; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 10px;">
+                    <span style="font-size: 1.2rem;">🏆</span>
+                    <b style="color: #d35400;"> פריט זה כבר הוגרל! </b>
+                    <div style="font-size: 0.9rem; margin-top: 5px;">
+                        הזוכה המאושר: <strong>תורם מספר {{winner.idUser}}</strong>
+                        <p>
+                        {{winner.user.firstName  }}
+                        {{winner.user.lastName  }}</p>
+
+                    </div>
+                </div>
+                }
+         
+
+  <!-- style="background-color: #f0fdf4; border: 1px solid #16a34a; padding: 12px; border-radius: 10px; text-align: center; margin-bottom: 15px;">
+    
+    <div style="font-size: 1.5rem; margin-bottom: 5px;">🏆</div>
+    <b style="color: #15803d; font-size: 1.1rem;">יש לנו זוכה!</b>
+    
+    <div style="margin-top: 8px; color: #1e293b;">
+        <strong>{{ winner.user.firstName }} {{ winner.user.lastName }}</strong>
+    </div>
+    
+    <div style="font-size: 0.85rem; color: #64748b;">
+        <i class="pi pi-envelope" style="font-size: 0.7rem;"></i> {{ winner.user.email }}
+    </div> -->
+    
+                <!--  -->
+
+                <p-divider></p-divider>
+
+                <div class="gift-actions">
+                    <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="success"
+                        (onClick)="editProduct(product)"></p-button>
+                    <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+                        (onClick)="deleteProduct(product)"></p-button>
+                    <button pButton type="button" icon="pi pi-shopping-cart" label="הוסף לסל"
+                    [disabled]="getWinner(product.id) !== undefined"
+                        (click)="addGiftToCart(product)"> </button>
+
+                    <p-button icon="pi pi-gift" [rounded]="true" [text]="true" severity="help"
+                        (onClick)="onExecuteDraw(product.id)" pTooltip="בצע הגרלה">
+                    </p-button>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+
+<p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="פרטי מתנה" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field mb-3">
+            <label for="name">שם המתנה</label>
+            <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus />
+            <small class="p-error" *ngIf="submitted && !product.name">שם הוא שדה חובה.</small>
+        </div>
+        <div class="field mb-3">
+            <label for="description">תיאור</label>
+            <textarea id="description" pInputTextarea [(ngModel)]="product.description" rows="3" cols="20"></textarea>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col mb-3">
+                <label for="price">מחיר כרטיס</label>
+                <p-inputNumber id="price" [(ngModel)]="product.price" mode="currency" currency="ILS"
+                    locale="he-IL"></p-inputNumber>
+            </div>
+        </div>
+        <div class="field mb-3">
+            <label>קטגוריה</label>
+            <p-select [options]="categories()" [(ngModel)]="product.categoryId" optionLabel="name" optionValue="id"
+                placeholder="בחר קטגוריה"></p-select>
+        </div>
+        <div class="field mb-3">
+            <label>תורם</label>
+            <p-select [options]="doners()" [(ngModel)]="product.idDoner" optionLabel="firstName" optionValue="id"
+                placeholder="בחר תורם">
+            </p-select>
+            <small class="p-error" *ngIf="submitted && !product.idDoner">חובה לבחור תורם.</small>
+        </div>
+        <div class="field">
+            <label for="img">קישור לתמונה</label>
+            <!-- <input type="text" pInputText id="img" [(ngModel)]="product.img" /> -->
+            <input type="file" #fileInput (change)="onFileSelected($event)" />
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button label="ביטול" icon="pi pi-times" [text]="true" (onClick)="hideDialog()"></p-button>
+        <p-button label="שמירה" icon="pi pi-check" [text]="true" (onClick)="saveProduct()"></p-button>
+    </ng-template>
+</p-dialog>

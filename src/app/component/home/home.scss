@@ -1,0 +1,107 @@
+.luxury-wrap {
+  padding: 0 5%;
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+.main-header {
+  padding: 30px 0;
+  text-align: center;
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 5px;
+    span { font-weight: 300; color: #888; }
+  }
+}
+
+.intro-section {
+  padding: 100px 0 60px;
+  text-align: center;
+  .main-title {
+    font-size: 4rem;
+    font-weight: 200;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .description {
+    color: #666;
+    font-style: italic;
+  }
+}
+
+// גריד של מוצרים ללא מסגרות כרטיסים
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 60px 40px;
+  padding-bottom: 100px;
+}
+
+.product-item {
+  .image-container {
+    position: relative;
+    overflow: hidden;
+    background-color: #f2f2f2;
+    aspect-ratio: 1 / 1.2;
+    
+    .luxury-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    &:hover {
+      .luxury-img { transform: scale(1.05); }
+      .overlay { opacity: 1; }
+    }
+  }
+
+  .product-info {
+    padding-top: 20px;
+    text-align: right;
+
+    .category {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #b8962e;
+      letter-spacing: 1px;
+    }
+
+    .name {
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin: 5px 0;
+    }
+
+    .price-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #eee;
+      margin-top: 10px;
+      padding-top: 10px;
+
+      .price { font-weight: 700; font-size: 1.1rem; }
+    }
+  }
+}
+
+.gold-link {
+  color: #1a1a1a !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
+  &:hover { color: #b8962e !important; }
+}

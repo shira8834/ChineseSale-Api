@@ -1,1 +1,36 @@
-/* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+
+
+/* הגדרות בסיסיות כדי שהפונט והצבעים של Aura ישפיעו על כל האתר */
+:root {
+    --p-primary-color: #3b82f6; /* הצבע הכחול של פריים */
+}
+
+body {
+    margin: 0;
+    font-family: Inter, var(--p-font-family); /* משתמש בפונט של Aura */
+    background-color: var(--p-content-background);
+    color: var(--p-text-color);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* אם אין לך PrimeFlex/Tailwind, זה יסדר את המרווחים בדיאלוג */
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-end { justify-content: flex-end; }
+.gap-4 { gap: 1rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-8 { margin-bottom: 2rem; }
+.flex-auto { flex: 1 1 auto; }
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ביטול עיגול הפינות המוגזם כדי שיהיה יותר "חד" כמו בדוגמה */
+.p-button, .p-inputtext {
+    border-radius: 6px !important;
+}

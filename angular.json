@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "a69096f3-f772-461e-8690-6659ee48d591"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -30,13 +31,15 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "node_modules/primeflex/primeflex.css",
+             "src/styles.scss"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
             }
+
           },
           "configurations": {
             "production": {

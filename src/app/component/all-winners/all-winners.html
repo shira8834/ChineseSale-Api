@@ -1,0 +1,21 @@
+<p>all-winners works!</p>
+    <h2 class="text-3xl font-bold text-primary mb-4">רשימת זוכים</h2>
+
+<p-table [value]="allWinners()" [paginator]="true" [rows]="10" class="report-table">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>מזהה מתנה</th>
+            <th>שם מתנה</th>
+            <th>שם הזוכה</th>
+            <th>אימייל</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-winner>
+        <tr>
+            <td>{{ winner.idGift }}</td>
+            <td>{{winner.gift.name}}</td>
+            <td>{{ winner.user.firstName }} {{ winner.user.lastName }}</td>
+            <td>{{ winner.user.email }}</td>
+        </tr>
+    </ng-template>
+</p-table>

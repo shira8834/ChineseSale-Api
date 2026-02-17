@@ -1,0 +1,86 @@
+<app-navbar></app-navbar> <router-outlet></router-outlet> 
+<div class="card">
+    <p-toast></p-toast>
+
+    <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left">
+            <button pButton label="קטגוריה חדשה" icon="pi pi-plus" class="p-button-success" (click)="openAddDialog()">
+            </button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table [value]="categories()" [rows]="10" [paginator]="true" responsiveLayout="scroll"
+        styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 15%">מזהה</th>
+                <th style="width: 40%">שם הקטגוריה</th>
+                <th style="width: 20%">צבע</th>
+                <th style="width: 25%">פעולות</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-cat>
+            <tr>
+                <td>{{cat.id}}</td>
+                <td>{{cat.name}}</td>
+                <td>
+                    <div [style.background-color]="cat.color"
+                        style="width: 30px; height: 30px; border-radius: 4px; border: 1px solid #ccc;">
+                    </div>
+                </td>
+                <td>
+                    <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2"
+                        (click)="openEditDialog(cat)">
+                    </button>
+                    <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteCategory(cat.id)">
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="addDialog" [style]="{width: '450px'}" header="הוספת קטגוריה חדשה" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="newName">שם</label>
+            <input type="text" pInputText id="newName" [(ngModel)]="newCategory.name" required autofocus />
+            <small class="p-error" *ngIf="submitted && !newCategory.name">שם הוא שדה חובה.</small>
+        </div>
+        <div class="field mt-3">
+            <label for="newColor">בחר צבע</label>
+            <input type="color" id="newColor" [(ngModel)]="newCategory.color" style="height: 40px; cursor: pointer;" />
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton label="ביטול" icon="pi pi-times" class="p-button-text" (click)="addDialog = false"></button>
+        <button pButton label="שמור הוספה" icon="pi pi-check" class="p-button-text" [loading]="isSaving"
+            [disabled]="isSaving" (click)="saveNewCategory()"> </button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="editDialog" [style]="{width: '450px'}" header="עריכת קטגוריה" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="editName">שם הקטגוריה</label>
+            <input type="text" pInputText id="editName" [(ngModel)]="selectedCategory.name" required />
+            <small class="p-error" *ngIf="submitted && !selectedCategory.name">השם לא יכול להיות ריק.</small>
+        </div>
+        <div class="field mt-3">
+            <label for="editColor">צבע</label>
+            <input type="color" id="editColor" [(ngModel)]="selectedCategory.color"
+                style="height: 40px; cursor: pointer;" />
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton label="ביטול" icon="pi pi-times" class="p-button-text" (click)="editDialog = false"></button>
+        <button pButton label="עדכן שינויים" icon="pi pi-save" class="p-button-text"
+            (click)="saveUpdateCategory()"></button>
+    </ng-template>
+</p-dialog>

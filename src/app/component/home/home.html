@@ -1,0 +1,66 @@
+<app-navbar></app-navbar> <router-outlet></router-outlet> 
+<div class="min-h-screen p-4 md:p-7" style="background-color: #f8fafc;">
+    
+    <div class="surface-card p-6 shadow-4 border-round-3xl mb-6 bg-indigo-900 text-white relative overflow-hidden">
+        <div class="relative z-1">
+            <div class="flex align-items-center gap-2 mb-3">
+                <i class="pi pi-bolt text-yellow-400"></i>
+                <span class="text-indigo-200 font-bold uppercase text-xs tracking-widest">מערכת ניהול מרכזית</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black mb-3 m-0">שלום רב 👋</h1>
+            <p class="text-indigo-100 text-lg mb-5 opacity-80 max-w-30rem">
+                ברוכים הבאים למערכת ניהול התורמים והמתנות. מכאן ניתן לגשת לכל חלקי המערכת במהירות.
+            </p>
+        </div>
+    </div>
+
+    <div class="grid mb-6">
+        <div class="col-12 md:col-6 p-3">
+            <div class="surface-card shadow-2 p-5 border-round-2xl hover:shadow-6 transition-all transition-duration-300 cursor-pointer border-top-3 border-blue-500" routerLink="/donors">
+                <div class="flex align-items-center justify-content-between mb-4">
+                    <div class="bg-blue-100 p-3 border-round-xl">
+                        <i class="pi pi-users text-3xl text-blue-600"></i>
+                    </div>
+                    <i class="pi pi-arrow-left text-gray-400"></i>
+                </div>
+                <h2 class="text-900 font-bold text-2xl mb-2">ניהול תורמים</h2>
+                <p class="text-600 m-0">צפייה ברשימות, עריכת פרטים והוספת תורמים חדשים למאגר.</p>
+            </div>
+        </div>
+
+        <div class="col-12 md:col-6 p-3">
+            <div class="surface-card shadow-2 p-5 border-round-2xl hover:shadow-6 transition-all transition-duration-300 cursor-pointer border-top-3 border-purple-500">
+                <div class="flex align-items-center justify-content-between mb-4">
+                    <div class="bg-purple-100 p-3 border-round-xl">
+                        <i class="pi pi-gift text-3xl text-purple-600"></i>
+                    </div>
+                    <i class="pi pi-arrow-left text-gray-400"></i>
+                </div>
+                <h2 class="text-900 font-bold text-2xl mb-2">מאגר מתנות</h2>
+                <p class="text-600 m-0">ניהול מלאי המתנות, הגדרת מחירים ושיוך לחבילות תרומה.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="col-12 sm:col-4 p-2 text-center">
+            <div class="p-4 bg-white shadow-1 border-round-xl">
+                <div class="text-500 font-medium mb-2 uppercase text-xs">תורמים פעילים</div>
+                <div class="text-900 font-black text-3xl">1,240</div>
+            </div>
+        </div>
+        <div class="col-12 sm:col-4 p-2 text-center">
+            <div class="p-4 bg-white shadow-1 border-round-xl">
+                <div class="text-500 font-medium mb-2 uppercase text-xs">מתנות שחולקו</div>
+                <div class="text-900 font-black text-3xl">856</div>
+            </div>
+        </div>
+        <div class="col-12 sm:col-4 p-2 text-center">
+            <div class="p-4 bg-white shadow-1 border-round-xl">
+                <div class="text-500 font-medium mb-2 uppercase text-xs">שביעות רצון</div>
+                <div class="text-900 font-black text-3xl">98%</div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,233 @@
+<app-navbar></app-navbar> <router-outlet></router-outlet>
+
+<div class="container p-4 bg-gray-50 min-h-screen">
+
+    <div class="flex justify-content-between align-items-center mb-5 border-bottom-1 border-gray-200 pb-3">
+        <div>
+            <h1 class="text-3xl font-bold text-900 m-0">ניהול תורמים</h1>
+            <p class="text-600 mt-1">צפייה, עריכה וניהול רשימת התורמים והמתנות</p>
+        </div>
+        <app-add-donor (donorSaved)="loadDonors()"></app-add-donor>
+    </div>
+
+    <div
+        class="hidden md:flex align-items-center px-5 py-2 mb-2 text-500 font-semibold text-sm uppercase tracking-wider">
+        <div style="width: 10%">מזהה</div>
+        <div style="width: 20%">שם פרטי</div>
+        <div style="width: 20%">שם משפחה</div>
+        <div style="width: 25%">אימייל</div>
+        <div style="width: 10%" class="text-center">מתנות</div>
+        <div style="width: 25%" class="text-center">פעולות</div>
+    </div>
+
+    <div class="card shadow-2 border-round-xl bg-white overflow-hidden">
+        <p-accordion [multiple]="false" [value]="['0']" class="custom-accordion"> @for (currentDonor of donors(); track
+            currentDonor.id) {
+            <p-accordion-panel [value]="currentDonor.id.toString()">
+
+                <p-accordion-header>
+                    <div class="flex align-items-center w-full gap-2 py-2">
+                        <div style="width: 10%">
+                            <span class="bg-blue-50 text-blue-700 px-2 py-1 border-round font-bold text-xs">#{{
+                                currentDonor.id }}</span>
+                        </div>
+
+                        <div style="width: 20%" class="text-900 font-medium">{{ currentDonor.firstName }}</div>
+
+                        <div style="width: 20%" class="text-900 font-medium">{{ currentDonor.lastName }}</div>
+
+                        <div style="width: 25%" class="text-600 overflow-hidden text-overflow-ellipsis">
+                            <i class="pi pi-envelope mr-1 text-xs text-400"></i>
+                            {{ currentDonor.eMail }}
+                        </div>
+
+                        <div style="width: 10%" class="text-center">
+                            <span class="bg-blue-100 text-blue-700 px-2 py-1 border-round-pill font-bold text-xs">
+                                {{ currentDonor.gifts?.length || 0 }}
+                            </span>
+                        </div>
+
+                        <div style="width: 25%" class="flex justify-content-center gap-2">
+                            <button pButton type="button" icon="pi pi-pencil"
+                                class="p-button-rounded p-button-success p-button-text hover:bg-green-50"
+                                (click)="$event.stopPropagation(); openUpdate(currentDonor)">
+                            </button>
+                            <button pButton type="button" icon="pi pi-trash"
+                                class="p-button-rounded p-button-danger p-button-text hover:bg-red-50"
+                                (click)="$event.stopPropagation(); deleteDonor(currentDonor.id)">
+                            </button>
+                        </div>
+                    </div>
+                </p-accordion-header>
+
+                <p-accordion-content>
+                    <div class="p-3 bg-gray-50 border-round-lg">
+                        <div class="flex align-items-center mb-3">
+                            <div
+                                class="w-2rem h-2rem bg-blue-500 text-white border-circle flex align-items-center justify-content-center mr-2">
+                                <i class="pi pi-gift text-sm"></i>
+                            </div>
+                            <h3 class="m-0 text-lg text-800">פירוט מתנות</h3>
+                        </div>
+
+                        <div class="grid">
+                            <div class="col-12 md:col-8">
+                                <ul
+                                    class="list-none p-0 m-0 bg-white border-1 border-gray-200 border-round-lg overflow-hidden shadow-1">
+                                    @for (gift of currentDonor.gifts ?? []; track gift.id) {
+                                    <li
+                                        class="p-3 flex justify-content-between align-items-center border-bottom-1 border-gray-100 hover:bg-blue-50 transition-colors transition-duration-150">
+                                        <div class="flex align-items-center">
+                                            <i class="pi pi-check-circle text-green-500 mr-2"></i>
+                                            <span class="font-medium text-700">{{ gift.name }}</span>
+                                        </div>
+                                        <span
+                                            class="bg-green-100 text-green-800 px-3 py-1 border-round-pill font-bold text-sm">
+                                            {{ gift.price }} ₪
+                                        </span>
+                                    </li>
+                                    } @empty {
+                                    <li class="p-4 text-center text-500 italic">
+                                        <i class="pi pi-box block text-2xl mb-2 text-300"></i>
+                                        אין מתנות רשומות לתורם זה.
+                                    </li>
+                                    }
+                                </ul>
+                            </div>
+
+                            <div class="col-12 md:col-4">
+                                <div class="p-3 border-1 border-blue-100 bg-blue-50 border-round-lg">
+                                    <div class="text-sm text-blue-600 font-bold uppercase mb-2">סיכום תרומות</div>
+                                    <div class="text-2xl font-bold text-blue-900">{{ (currentDonor.gifts?.length || 0)
+                                        }} מתנות</div>
+                                    <div class="text-sm text-blue-400 mt-1 italic">עודכן לאחרונה: היום</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-accordion-content>
+
+            </p-accordion-panel>
+            }
+        </p-accordion>
+    </div>
+
+    <app-update-donor [donorTest]="selectedDonor()" (donorSaved)="loadDonors()"></app-update-donor>
+</div>
+
+
+
+
+
+
+<!-- <div class="container-fluid p-5 min-h-screen" style="background: #f8fafc;">
+    
+    <div class="flex justify-content-between align-items-center mb-6 p-4 border-round-2xl bg-white shadow-2 border-left-3" style="border-left-color: #6366f1;">
+        <div>
+            <h1 class="text-4xl font-black text-900 m-0 tracking-tight">ניהול תורמים ומתנות</h1>
+            <p class="text-600 mt-1 font-medium italic">מערכת ניהול VIP - תצוגת קולקציה מודרנית</p>
+        </div>
+        <div class="scalein animation-duration-500">
+            <app-add-donor (donorSaved)="loadDonors()"></app-add-donor>
+        </div>
+    </div>
+
+    <div class="hidden md:flex align-items-center px-5 py-3 mb-3 bg-gray-900 border-round-xl text-white font-bold shadow-4">
+        <div style="width: 10%">מזהה</div>
+        <div style="width: 20%">שם פרטי</div>
+        <div style="width: 20%">שם משפחה</div>
+        <div style="width: 25%">סטטוס / אימייל</div>
+        <div style="width: 25%" class="text-center">ניהול כרטיס</div>
+    </div>
+
+    <div class="card border-none bg-transparent">
+        <p-accordion [multiple]="true" class="custom-neon-accordion">
+            @for (currentDonor of donors(); track currentDonor.id) {
+                <p-accordion-panel [value]="currentDonor.id.toString()" class="mb-3 shadow-1 border-round-xl overflow-hidden">
+                    
+                    <p-accordion-header>
+                        <div class="flex align-items-center w-full gap-2 py-2">
+                            <div style="width: 10%">
+                                <span class="bg-indigo-500 text-white px-3 py-1 border-round-pill font-black text-xs shadow-2">
+                                    {{ currentDonor.id }}
+                                </span>
+                            </div>
+                            
+                            <div style="width: 20%" class="text-900 font-black text-xl">{{ currentDonor.firstName }}</div>
+                            
+                            <div style="width: 20%" class="text-900 font-black text-xl">{{ currentDonor.lastName }}</div>
+                            
+                            <div style="width: 25%" class="text-500 flex align-items-center">
+                                <i class="pi pi-bolt mr-2 text-yellow-500"></i>
+                                <span class="white-space-nowrap overflow-hidden text-overflow-ellipsis font-medium">{{ currentDonor.eMail }}</span>
+                            </div>
+                            
+                            <div style="width: 25%" class="flex justify-content-center gap-3">
+                                <button pButton type="button" icon="pi pi-user-edit" 
+                                        class="p-button-rounded p-button-info p-button-outlined shadow-1" 
+                                        (click)="$event.stopPropagation(); openUpdate(currentDonor)">
+                                </button>
+                                <button pButton type="button" icon="pi pi-trash" 
+                                        class="p-button-rounded p-button-danger p-button-outlined shadow-1" 
+                                        (click)="$event.stopPropagation(); deleteDonor(currentDonor.id)">
+                                </button>
+                            </div>
+                        </div>
+                    </p-accordion-header>
+                    
+                    <p-accordion-content>
+                        <div class="p-4 bg-gray-50 border-round-xl">
+                            
+                            <div class="flex align-items-center mb-5">
+                                <div class="w-3rem h-3rem bg-indigo-600 text-white border-circle flex align-items-center justify-content-center shadow-4 mr-3">
+                                    <i class="pi pi-star text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="m-0 text-2xl font-black text-indigo-900">הקולקציה שנבחרה</h3>
+                                    <p class="text-500 m-0 italic">מתנות ופריטים אישיים</p>
+                                </div>
+                            </div>
+
+                            <div class="grid">
+                                @for (gift of currentDonor.gifts ?? []; track gift.id; let i = $index) {
+                                    <div class="col-12 sm:col-6 md:col-4 lg:col-3 p-3">
+                                        <div class="card p-0 border-none shadow-3 hover:shadow-8 transition-all transition-duration-400 border-top-3 overflow-hidden" 
+                                             [style.border-top-color]="i % 3 === 0 ? '#ff00ff' : (i % 3 === 1 ? '#00ffff' : '#7df9ff')"
+                                             style="border-radius: 20px; background: white;">
+                                            
+                                            <div class="flex align-items-center justify-content-center py-5 bg-gray-100 relative shadow-inner">
+                                                <i class="pi pi-gift text-6xl text-indigo-100"></i>
+                                                
+                                                <div class="absolute bottom-0 right-0 m-2 bg-gray-900 border-round-xl px-3 py-1 shadow-4" style="border: 1px solid #333;">
+                                                   <span class="text-yellow-400 font-black text-lg">₪ {{ gift.price }}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="p-4 text-center">
+                                                <div class="text-xl font-black text-indigo-900 mb-2 tracking-tight">
+                                                    {{ gift.name }}
+                                                </div>
+                                                <div class="text-xs font-bold text-blue-400 uppercase tracking-widest border-top-1 border-gray-100 pt-2">
+                                                    Donation Item
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                } @empty {
+                                    <div class="col-12 text-center py-8">
+                                        <i class="pi pi-sparkles text-7xl text-indigo-100 mb-4 block"></i>
+                                        <h4 class="text-2xl font-bold text-indigo-300">הקולקציה כרגע ריקה</h4>
+                                        <p class="text-500 italic">התורם הזה עדיין לא בחר מתנות למסע שלו</p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </p-accordion-content>
+
+                </p-accordion-panel>
+            }
+        </p-accordion>
+    </div>
+
+    <app-update-donor [donorTest]="selectedDonor()" (donorSaved)="loadDonors()"></app-update-donor>
+</div> -->

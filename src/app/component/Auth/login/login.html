@@ -1,0 +1,55 @@
+<p-toast />
+
+<div class="flex align-items-center justify-content-center min-h-screen surface-ground p-4">
+    <p-card [style]="{ width: '400px' }" styleClass="shadow-6 border-round-xl">
+        
+        <ng-template pTemplate="header">
+            <div class="text-center pt-6 pb-2">
+<i class="pi pi-user text-primary text-5xl mb-3"></i>
+                <h2 class="m-0 text-900">כניסה למערכת</h2>
+                <p class="text-600 mt-2">!שמחים לראות אותך שוב</p>
+            </div>
+        </ng-template>
+
+        
+
+        <div class="flex flex-column gap-4">
+            <div class="flex flex-column gap-2">
+                <label for="email" class="font-bold">כתובת אימייל</label>
+                <div class="p-input-icon-left w-full">
+                    <i class="pi pi-envelope"></i>
+                    <input pInputText id="email" 
+                           [(ngModel)]="loginData.Email" 
+                           placeholder="email@example.com" 
+                           class="w-full" />
+                </div>
+            </div>
+
+            <div class="flex flex-column gap-2">
+                <label for="pass" class="font-bold">סיסמה</label>
+                <p-password id="pass" 
+                            [(ngModel)]="loginData.Password" 
+                            [toggleMask]="true" 
+                            [feedback]="false"
+                            placeholder="הכנס סיסמה"
+                            styleClass="w-full" 
+                            inputStyleClass="w-full">
+                </p-password>
+            </div>
+
+            <p-button label="התחברות" 
+                      icon="pi pi-sign-in" 
+                      (click)="onLogin()" 
+                      styleClass="w-full mt-2 p-button-lg border-round-lg shadow-2">
+            </p-button>
+        </div>
+
+        <ng-template pTemplate="footer">
+            <div class="text-center mt-2">
+                <span class="text-600">עדיין אין לך חשבון?</span>
+                <p-button label="להרשמה מהירה" link routerLink="/register" styleClass="p-0 mr-2 font-bold"></p-button>
+            </div>
+        </ng-template>
+
+    </p-card>
+</div>

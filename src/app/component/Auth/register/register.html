@@ -1,0 +1,80 @@
+<p-toast />
+
+<div class="flex align-items-center justify-content-center min-h-screen surface-ground p-4">
+    <p-card [style]="{ width: '450px' }" styleClass="shadow-6 border-round-xl">
+        
+        <ng-template pTemplate="header">
+            <div class="text-center pt-6 pb-2">
+                <i class="pi pi-user-plus text-primary text-5xl mb-3"></i>
+                <h2 class="m-0 text-900">יצירת חשבון</h2>
+                <p class="text-600 mt-2">הצטרפו למערכת המכירה הסינית</p>
+            </div>
+        </ng-template>
+
+        <div class="flex flex-column gap-3">
+            <div class="flex flex-column md:flex-row gap-3">
+                <div class="flex flex-column gap-2 flex-1">
+                    <label for="fname" class="font-bold">שם פרטי</label>
+                    <input pInputText id="fname" [(ngModel)]="registerData.FirstName" placeholder="הכנס שם פרטי" class="w-full" />
+                </div>
+                <div class="flex flex-column gap-2 flex-1">
+                    <label for="lname" class="font-bold">שם משפחה</label>
+                    <input pInputText id="lname" [(ngModel)]="registerData.LastName" placeholder="הכנס שם משפחה" class="w-full" />
+                </div>
+            </div>
+
+            <div class="flex flex-column gap-2">
+                <label for="email" class="font-bold">כתובת אימייל</label>
+                <div class="p-input-icon-left w-full">
+                    <i class="pi pi-envelope"></i>
+                    <input pInputText id="email" [(ngModel)]="registerData.Email" placeholder="email@example.com" class="w-full" />
+                </div>
+            </div>
+
+            <div class="flex flex-column gap-2">
+                <label for="phone" class="font-bold">מספר טלפון</label>
+                <div class="p-input-icon-left w-full">
+                    <i class="pi pi-phone"></i>
+                    <input pInputText id="phone" [(ngModel)]="registerData.PhoneNumber" placeholder="0523456789" class="w-full" />
+                </div>
+            </div>
+            <div class="flex flex-column gap-2">
+                <label for="pass" class="font-bold">סיסמה</label>
+                <p-password id="pass" [(ngModel)]="registerData.Password" 
+                            [toggleMask]="true" 
+                            promptLabel="בחר סיסמה חזקה" 
+                            weakLabel="חלשה" 
+                            mediumLabel="בינונית" 
+                            strongLabel="חזקה מאוד"
+                            styleClass="w-full" 
+                            inputStyleClass="w-full">
+                </p-password>
+            </div>
+
+            <div class="flex flex-column gap-2">
+                <label for="confirm" class="font-bold">אימות סיסמה</label>
+                <p-password id="confirm" [(ngModel)]="registerData.confirmPassword" 
+                            [feedback]="false" 
+                            [toggleMask]="true" 
+                            placeholder="הקלד שוב את הסיסמה"
+                            styleClass="w-full" 
+                            inputStyleClass="w-full">
+                </p-password>
+            </div>
+
+            <p-button label="צור חשבון עכשיו" 
+                      icon="pi pi-check-circle" 
+                      (click)="onRegister()" 
+                      styleClass="w-full mt-4 p-button-lg border-round-lg shadow-2">
+            </p-button>
+        </div>
+
+        <ng-template pTemplate="footer">
+            <div class="text-center mt-2">
+                <span class="text-600">כבר רשום במערכת?</span>
+                <p-button label="לחץ כאן להתחברות" link routerLink="/login" styleClass="p-0 mr-2 font-bold"></p-button>
+            </div>
+        </ng-template>
+
+    </p-card>
+</div>
