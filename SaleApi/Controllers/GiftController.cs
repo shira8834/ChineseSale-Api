@@ -41,7 +41,7 @@ namespace SaleApi.Controllers
 
         // מתנה חדשה
         [HttpPost]
-        //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<Gift>> NewGift([FromForm] CreateGiftDto dto)
         {
             if (!ModelState.IsValid)
@@ -62,7 +62,7 @@ namespace SaleApi.Controllers
 
         //מחיקת מתנה
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletGift(int id)
         {
             try
@@ -98,7 +98,7 @@ namespace SaleApi.Controllers
 
         //עידכון מתנה
         [HttpPut]
-        //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<GiftResponseDto>> UpdateGift([FromForm] UpdateGiftDto dto)
         {
             if (!ModelState.IsValid)

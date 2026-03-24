@@ -100,32 +100,6 @@
   },
   {
     "ContainingType": "SaleApi.Controllers.BagController",
-    "Method": "NewGiftToBag",
-    "RelativePath": "api/Bag",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "bagDto",
-        "Type": "SaleApi.Dto.BagDto\u002BCreateBagDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "SaleApi.Dto.BagDto\u002BCreateBagDto",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "SaleApi.Controllers.BagController",
     "Method": "DeletBag",
     "RelativePath": "api/Bag/{id}",
     "HttpMethod": "DELETE",
@@ -165,6 +139,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "SaleApi.Controllers.BagController",
+    "Method": "AddToBag",
+    "RelativePath": "api/Bag/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bagDto",
+        "Type": "SaleApi.Dto.BagDto\u002BCreateBagDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SaleApi.Controllers.BagController",
+    "Method": "Checkout",
+    "RelativePath": "api/Bag/checkout/{userId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "SaleApi.Controllers.BagController",
@@ -850,8 +856,80 @@
   },
   {
     "ContainingType": "OrderController",
-    "Method": "GetAllGift",
+    "Method": "GetAllOrders",
     "RelativePath": "api/Order",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SaleApi.Models.Order, SaleApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "OrderController",
+    "Method": "GetOrdersByGiftId",
+    "RelativePath": "api/Order/by-gift/{giftId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "giftId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OrderController",
+    "Method": "GetHistory",
+    "RelativePath": "api/Order/history/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OrderController",
+    "Method": "GetOrdersSortedByPopularity",
+    "RelativePath": "api/Order/sort/popularity",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SaleApi.Dto.GiftDto\u002BGetGiftDto, SaleApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "OrderController",
+    "Method": "GetOrdersSortedByPrice",
+    "RelativePath": "api/Order/sort/price",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -882,6 +960,32 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SaleApi.Controllers.RandomController",
+    "Method": "CheckIfGiftDrawn",
+    "RelativePath": "api/Random/is-drawn/{giftId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "giftId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SaleApi.Controllers.RandomController",
+    "Method": "GetWinners",
+    "RelativePath": "api/Random/Winner",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

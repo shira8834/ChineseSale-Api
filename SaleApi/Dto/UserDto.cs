@@ -19,6 +19,7 @@ namespace SaleApi.Dto
             public string Email { get; set; } = null!;
 
             public string? PhoneNumber { get; set; }
+            public UserRole Role { get; set; } = UserRole.User;
 
         }
 
@@ -54,6 +55,8 @@ namespace SaleApi.Dto
             public string LastName { get; set; } = string.Empty;
             public string Email { get; set; } = string.Empty;
             public string PhoneNumber { get; set; } = string.Empty;
+            public UserRole Role { get; set; }
+
         }
 
         public class UserUpdateDto

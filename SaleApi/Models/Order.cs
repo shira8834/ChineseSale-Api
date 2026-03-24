@@ -19,5 +19,7 @@ namespace SaleApi.Models
         public Gift Gift { get; set; }
 
         public bool Win { get; set; }
+        public int OrderGroupId { get; set; }
+
     }
 }

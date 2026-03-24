@@ -23,6 +23,7 @@ namespace SaleApi.Controllers
         }
 
         [HttpGet]
+
         public async Task<ActionResult<IEnumerable<Category>>> GetAllCategory()
         {
             var category = await _categoryService.GetAllCategory();
@@ -30,7 +31,7 @@ namespace SaleApi.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<Category>> NewCategory([FromBody] CreateCategoryDto dto)
         {
             if (!ModelState.IsValid)
@@ -53,7 +54,7 @@ namespace SaleApi.Controllers
 
         //מחיקת קטגוריה
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteDoner(int id)
         {
             try
@@ -89,7 +90,7 @@ namespace SaleApi.Controllers
 
         //עידכון קטגוריה 
         [HttpPut]
-        //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<Category>> UpdateCategory([FromBody] GetCategoryDto dto)
         {
             if (!ModelState.IsValid)

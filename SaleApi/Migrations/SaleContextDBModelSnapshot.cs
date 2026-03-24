@@ -142,6 +142,9 @@ namespace SaleApi.Migrations
                     b.Property<int>("IdUser")
                         .HasColumnType("int");
 
+                    b.Property<int>("OrderGroupId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Win")
                         .HasColumnType("bit");
 

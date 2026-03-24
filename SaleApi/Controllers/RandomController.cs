@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SaleApi.Services;
 
 namespace SaleApi.Controllers
@@ -17,15 +18,44 @@ namespace SaleApi.Controllers
 
 
         [HttpPost("{giftId}")]
+        //[Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> RunDraw(int giftId)
         {
-            int? winnerId = await _randomService.PickWinner(giftId);
-
-            if (winnerId == null)
+            try
             {
-                return NotFound("לא נמצאו כרטיסים זכאים להגרלה עבור מוצר זה.");
+                var winner = await _randomService.ExecuteDraw(giftId);
+                if (winner == null)
+                {
+                    return NotFound("לא נמצאו כרטיסים זכאים להגרלה עבור מוצר זה.");
+                }
+
+                return Ok(winner);
             }
-            return Ok(new { WinnerId = winnerId });
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        //  עבור מתנה אחת
+        [HttpGet("is-drawn/{giftId}")]
+        //[Authorize(Roles = "Admin")]
+
+        public async Task<IActionResult> CheckIfGiftDrawn(int giftId)
+        {
+            var result = await _randomService.IsGiftDrawnAsync(giftId);
+            return Ok(result); 
+        }
+
+        // שליפת כל רשימת הזוכים 
+        [HttpGet("Winner")]
+
+        public async Task<IActionResult> GetWinners()
+        {
+            var winners = await _randomService.GetAllWinnersAsync();
+            return Ok(winners); 
         }
     }
 }

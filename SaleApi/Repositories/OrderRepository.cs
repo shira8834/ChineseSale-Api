@@ -20,14 +20,6 @@ namespace SaleApi.Repositories
                 .ToListAsync();
         }
 
-        //GetOrdersSortedByPopularity
-        public async Task<IEnumerable<Order>> GetOrdersSortedByPopularity()
-        {
-            return await _context.Orders
-                .Include(o => o.Gift)
-                .Include(o => o.User)
-                .ToListAsync();
-        }
 
         // AddOrder
         public async Task<Order> AddOrder(Order order)
@@ -52,5 +44,40 @@ namespace SaleApi.Repositories
                 .Include(o => o.Gift)
                 .ToListAsync();
         }
+
+
+
+        // GetOrdersByUserId
+        public async Task<IEnumerable<Order>> GetOrdersByUserId(int userId)
+        {
+            return await _context.Orders
+                .Where(o => o.IdUser == userId)
+                .Include(o => o.Gift)
+                .ToListAsync();
+        }
+
+        //GetOrdersSortedByPopularity
+        public async Task<IEnumerable<Order>> GetOrdersSortedByPopularity()
+        {
+            return await _context.Orders
+                .Include(o => o.Gift)
+                .Include(o => o.User)
+                .GroupBy(o => o.IdGift) // מקבצים לפי מתנה
+                .OrderByDescending(g => g.Count()) // ממיינים לפי הכמות הגבוהה ביותר
+                .SelectMany(g => g) // מחזירים לרשימה שטוחה של הזמנות
+                .ToListAsync();
+        }
+
+        //GetOrdersSortedByPrice
+        public async Task<IEnumerable<Order>> GetOrdersSortedByPrice()
+        {
+            return await _context.Orders
+                .Include(o => o.Gift)
+                .Include(o => o.User)
+                .OrderByDescending(o => o.Gift.Price) // מיון לפי מחיר המתנה מהגבוה לנמוך
+                .ToListAsync();
+        }
+
+
     }
 }

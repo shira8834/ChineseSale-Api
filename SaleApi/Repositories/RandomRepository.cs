@@ -11,7 +11,6 @@ namespace SaleApi.Repositories
         {
             _context = saleContextDB;
         }
-
         public async Task<IEnumerable<int>> GetOrdersForGift(int giftId)
         {
             return await _context.Orders
@@ -29,9 +28,11 @@ namespace SaleApi.Repositories
         {
             _context.Winners.Add(winner);
             var order = await _context.Orders.FindAsync(orderId);
+
             if (order != null)
             {
                 order.Win = true;
+
             }
 
             await _context.SaveChangesAsync();
@@ -40,6 +41,18 @@ namespace SaleApi.Repositories
         public async Task<Order> GetOrderById(int orderId)
         {
             return await _context.Orders.FindAsync(orderId);
+        }
+
+        //בדיקה האם המתנה הזאת הוגרלה
+        public async Task<bool> IsGiftDrawnAsync(int giftId)
+        {
+            return await _context.Winners.AnyAsync(w => w.IdGift == giftId);
+        }
+
+        //רשימת הזוכים
+        public async Task<IEnumerable<Winner>> GetDrawnGiftIdsAsync()
+        {
+            return await _context.Winners.Include(w => w.User).Include(w => w.Gift).ToListAsync();
         }
     }
 }

@@ -38,6 +38,7 @@ namespace SaleApi.Services
                 Email = createDto.Email,
                 Password = HashPassword(createDto.Password), 
                 PhoneNumber = createDto.PhoneNumber,
+
             };
 
             var createdUser = await _userRepository.CreateAsync(user);
@@ -80,7 +81,7 @@ namespace SaleApi.Services
                 LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-
+                Role=user.Role
             };
         }
 
@@ -130,7 +131,7 @@ namespace SaleApi.Services
                 return null;
             }
 
-            var token = _tokenService.GenerateToken(user.Id, user.Email, user.FirstName, user.LastName);
+            var token = _tokenService.GenerateToken(user.Id, user.Email, user.FirstName, user.LastName, user.Role);
             var expiryMinutes = _configuration.GetValue<int>("JwtSettings:ExpiryMinutes", 60);
 
             _logger.LogInformation("User {UserId} authenticated successfully", user.Id);

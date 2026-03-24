@@ -22,6 +22,8 @@ namespace SaleApi.Controllers
         }
 
         [HttpGet]
+        //[Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<IEnumerable<UpdateDonerDto>>> GetAllDoner()
         {
             var doners = await _donerService.GetAllDoner();
@@ -29,7 +31,7 @@ namespace SaleApi.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<Doner>> NewDoner([FromBody] CreateDonerDto dto)
         {
             if (!ModelState.IsValid)
@@ -52,7 +54,7 @@ namespace SaleApi.Controllers
 
         //מחיקת תורם
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteDoner(int id)
         {
             try
@@ -68,6 +70,8 @@ namespace SaleApi.Controllers
 
         //get by id
         [HttpGet("{id}")]
+        //[Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<Doner>> GetDonerById(int id)
         {
             try
@@ -86,7 +90,7 @@ namespace SaleApi.Controllers
 
         //עידכון תורם 
         [HttpPut]
-        //[Authorize(Roles = "manager")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<Doner>> UpdateDoner([FromBody] UpdateDonerDto dto)
         {
             if (!ModelState.IsValid)
@@ -105,6 +109,8 @@ namespace SaleApi.Controllers
         }
         //כל התורמים ורשימת המתנות שלהם
         [HttpGet ("withGifts")]
+        //[Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<IEnumerable<GetDonerDtoWithGift>>> GetAllDonerWithGift()
         {
             var doners = await _donerService.GetAllDonerWithGift();
@@ -114,6 +120,8 @@ namespace SaleApi.Controllers
 
         //get by id with gift
         [HttpGet("withGifts/{id}")]
+        //[Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<GetDonerDtoWithGift>> GetDonerByIdWithGigt(int id)
         {
             try
@@ -131,6 +139,7 @@ namespace SaleApi.Controllers
 
         //get by name
         [HttpGet("doner/name")]
+        //[Authorize(Roles = "Admin")]
 
         public async Task<ActionResult<Doner>> GetDonerByName([FromQuery] string name)
         {
@@ -149,6 +158,7 @@ namespace SaleApi.Controllers
 
         //get by name
         [HttpGet("doner/email")]
+        //[Authorize(Roles = "Admin")]
 
         public async Task<ActionResult<Doner>> GetDonerByMail([FromQuery] string email)
         {
@@ -167,6 +177,7 @@ namespace SaleApi.Controllers
 
         //get by gift name
         [HttpGet("doner/gift")]
+        //[Authorize(Roles = "Admin")]
 
         public async Task<ActionResult<Doner>> GetDonerByGift([FromQuery] string giftName)
         {

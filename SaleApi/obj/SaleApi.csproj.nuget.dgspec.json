@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\Desktop\\SaleApi\\SaleApi\\SaleApi.csproj": {}
+    "C:\\Users\\User\\Desktop\\ChineseSale\\SaleApi גמור\\SaleApi\\SaleApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\Desktop\\SaleApi\\SaleApi\\SaleApi.csproj": {
+    "C:\\Users\\User\\Desktop\\ChineseSale\\SaleApi גמור\\SaleApi\\SaleApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Desktop\\SaleApi\\SaleApi\\SaleApi.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\ChineseSale\\SaleApi גמור\\SaleApi\\SaleApi.csproj",
         "projectName": "SaleApi",
-        "projectPath": "C:\\Users\\User\\Desktop\\SaleApi\\SaleApi\\SaleApi.csproj",
+        "projectPath": "C:\\Users\\User\\Desktop\\ChineseSale\\SaleApi גמור\\SaleApi\\SaleApi.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Desktop\\SaleApi\\SaleApi\\obj\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\ChineseSale\\SaleApi גמור\\SaleApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -51,6 +51,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.15.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.11, )"
